@@ -94,15 +94,13 @@ public class MemorySpace {
 	 */
 	public void free(int address) {
 		if(allocatedList.getSize()==0) throw new IllegalArgumentException("index must be between 0 and size");
-		ListIterator list=allocatedList.iterator();		
-		while (list.current!=null) 
-		{
-			if(list.current.block.baseAddress==address)
-			{
-				allocatedList.remove(list.current);
-				freeList.addLast(list.current.block);
+		Node iter = allocatedList.getFirst();
+		while (iter!=null) {
+			if(iter.block.baseAddress==address) {
+				allocatedList.remove(iter);
+				freeList.addLast(iter.block);
 			}
-			list.next();
+			iter = iter.next;
 		}
 	}
 	
