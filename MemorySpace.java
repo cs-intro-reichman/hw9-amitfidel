@@ -57,8 +57,24 @@ public class MemorySpace {
 	 *        the length (in words) of the memory block that has to be allocated
 	 * @return the base address of the allocated block, or -1 if unable to allocate
 	 */
-	public int malloc(int length) {		
-		//// Replace the following statement with your code
+	public int malloc(int length) {
+		ListIterator list=freeList.iterator();		
+		while (list.current!=null) 
+		{
+			if(list.current.block.length>=length)
+			{
+				MemoryBlock m=new MemoryBlock(list.current.block.length, length);
+				allocatedList.addLast(m);
+				if (list.current.block.length==length)
+				freeList.remove(list.current);
+				else {
+				list.current.block.baseAddress+=length;
+				list.current.block.length-=length;
+				}
+				return list.current.block.baseAddress;
+			}
+			list.next();
+		}
 		return -1;
 	}
 
@@ -71,7 +87,17 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
-		//// Write your code here
+		if(allocatedList.getSize()==0) throw new IllegalArgumentException("index must be between 0 and size");
+		ListIterator list=allocatedList.iterator();		
+		while (list.current!=null) 
+		{
+			if(list.current.block.baseAddress==address)
+			{
+				allocatedList.remove(list.current);
+				freeList.addLast(list.current.block);
+			}
+			list.next();
+		}
 	}
 	
 	/**
@@ -88,6 +114,25 @@ public class MemorySpace {
 	 * In this implementation Malloc does not call defrag.
 	 */
 	public void defrag() {
-		//// Write your code here
+		boolean change = false;
+		Node check = freeList.getFirst();
+		for(int i=0;i<freeList.getSize();i++) 
+		{
+			Node runner = freeList.getFirst();
+			while (runner!=null) 
+			{
+				if((check.block.baseAddress+check.block.length)==runner.block.baseAddress) 
+				{
+					check.block.length += runner.block.length;
+					freeList.remove(runner);
+					change = true;
+				}
+				runner = runner.next;
+			}
+			if(!change) 
+			check = check.next; 
+			else 
+			check = freeList.getFirst();
+		}
 	}
 }
