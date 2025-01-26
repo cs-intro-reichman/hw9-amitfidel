@@ -107,8 +107,10 @@ public class LinkedList {
 			first = new Node(block);
 			last = new Node(block);
 		}
-		if(size==1) {first.next=new Node(block);last = first.next;} else {
-		last.next = new Node(block); last = last.next; }
+		if(size==1) 
+		{first.next=new Node(block);last = first.next;} 
+		else 
+		{last.next = new Node(block); last = last.next;} 
 		size++;
 	}
 	
@@ -178,6 +180,7 @@ public class LinkedList {
 	 *        the node that will be removed from this list
 	 */
 	public void remove(Node node) {
+		//// Write your code here
 		if(node==null)     throw new NullPointerException("ERROR NullPointerException!");
 		if(node==first) 
 		{ 
@@ -204,18 +207,12 @@ public class LinkedList {
 			size--;
 			return;
 		}
-		if(node==first) 
-		{
-		 first.next=first; size--; 
-		 return; 
-		}
+		if(node==first) { first.next=first; size--; return; }
 		else {
-			while(iter!=null) {
+			while(iter!=null) 
+			{
 				if(iter.next==node)
-				{ 
-					iter.next=iter.next.next;
-					size--; 
-				}
+				{ iter.next=iter.next.next; size--; }
 				iter = iter.next;
 			}
 		} 

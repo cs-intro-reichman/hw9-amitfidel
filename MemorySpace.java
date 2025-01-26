@@ -58,30 +58,30 @@ public class MemorySpace {
 	 * @return the base address of the allocated block, or -1 if unable to allocate
 	 */
 	public int malloc(int length) {		
+		//// Replace the following statement with your code
 		int i=0;
 		Node iter = freeList.getFirst();
-		while(iter!=null) 
-		{
-			if(iter.block.length>=length) break;
+		while(iter!=null) {
+			if(iter.block.length>=length) {
+				break;
+			}
 			i++;
 			iter=iter.next;
 		}
 			if(iter==null) return -1;
-			if(iter.block.length==length) 
-			{
+			if(iter.block.length==length) {
 				allocatedList.addLast(new MemoryBlock(iter.block.baseAddress, length));
 				int ret = iter.block.baseAddress;
 				freeList.remove(iter);
 				return ret;
-			} 
-			else 
-			{
+			} else {
 				allocatedList.addLast(new MemoryBlock(iter.block.baseAddress, length));
 				freeList.remove(i);
 				freeList.add(i,new MemoryBlock(iter.block.baseAddress+length, iter.block.length-length));
 				return iter.block.baseAddress;
 			}
 	}
+
 	/**
 	 * Frees the memory block whose base address equals the given address.
 	 * This implementation deletes the block whose base address equals the given 
@@ -91,6 +91,7 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
+		//// Write your code here
 		if(allocatedList.getSize()==0) throw new IllegalArgumentException("index must be between 0 and size");
 		Node iter = allocatedList.getFirst();
 		while (iter!=null) {
@@ -118,23 +119,19 @@ public class MemorySpace {
 	public void defrag() {
 		boolean change = false;
 		Node check = freeList.getFirst();
-		for(int i=0;i<freeList.getSize();i++) 
-		{
+		for(int i=0;i<freeList.getSize();i++) {
 			Node runner = freeList.getFirst();
-			while (runner!=null) 
-			{
-				if((check.block.baseAddress+check.block.length)==runner.block.baseAddress) 
-				{
+			while (runner!=null) {
+				if((check.block.baseAddress+check.block.length)==runner.block.baseAddress) {
 					check.block.length += runner.block.length;
 					freeList.remove(runner);
 					change = true;
 				}
 				runner = runner.next;
 			}
-			if(!change) 
-			check = check.next; 
-			else 
-			check = freeList.getFirst();
+			if(!change) { check = check.next; }
+			else {check = freeList.getFirst(); }
+
 		}
 	}
 }
